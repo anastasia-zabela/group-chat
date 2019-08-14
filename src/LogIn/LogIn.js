@@ -5,10 +5,15 @@ import logInStyle from './LogIn.module.css';
 const LogIn = (props) => {
   return (
     <section className={logInStyle.auth}>
-      <h3>Enter your name</h3>
-      <form>
-        <input type="text"/>
-        <button onClick={props.onClick} type="submit">Enter chat</button>
+      <form action="#" name="login" onSubmit={props.onSubmit}>
+        <fieldset>
+          <legend>Welcome to RSS Chat</legend>
+          <p>
+            <label htmlFor="name">Your name</label>
+            <input type="text" id="name" autoComplete="off" autoFocus />
+          </p>
+        </fieldset>
+        <input type="submit" value="Enter chat" />
       </form>
     </section>
   )
