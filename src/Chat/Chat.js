@@ -1,4 +1,6 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 import Message from '../Message/Message';
 import chatStyle from './Chat.module.css';
@@ -37,7 +39,7 @@ class Chat extends React.Component {
     this.setState({ renderedMessages: messages });
   }
 
-  UNSAFE_componentDidMount() {
+  componentDidMount() {
     const content = document.getElementById('content');
     content.scrollTop = content.scrollHeight;
   }
@@ -49,18 +51,19 @@ class Chat extends React.Component {
 
   render() {
     // console.log('props', this.props.messages)
-    let status = this.props.connected ? 'Connected' : 'Connecting...';
     // console.log( 'this.state', this.state.recivedMessages)
     // console.log('rendered', this.state.renderedMessages)
 
     return (
-      <section className={chatStyle.chatContainer}>
+      <section className={chatStyle.chat}>
         <div className={chatStyle.content} id="content">
           {this.state.renderedMessages}
         </div>
-        <div>
-          <span className={chatStyle.status}>{status}</span>
-          <input type="text" className={chatStyle.input} onKeyDown={this.props.onKeyDown} disabled={!this.props.connected} />
+        <div className={chatStyle.sendForm}>
+          <input type="text" className={chatStyle.enterMessage} onKeyDown={this.props.onKeyDown} disabled={!this.props.connected} />
+          <button type="submit" className={chatStyle.sendMessage} value="">
+            <FontAwesomeIcon icon={faChevronRight} />
+          </button>
         </div>
       </section>
     )

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import messageStyle from './Message.module.css';
+
 const Message = ({ name, text, date }) => {
   const currentDate = new Date(date);
   var options = {
@@ -7,16 +9,17 @@ const Message = ({ name, text, date }) => {
     month: 'long',
     day: 'numeric',
     hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric'
+    minute: 'numeric'
   };
   const formatDate = currentDate.toLocaleString('en-US', options);
 
   return (
-    <div>
-      <span>{formatDate}</span>
-      <span>{name} </span> 
-      <span>{text}</span>
+    <div className={messageStyle.messageContainer}>
+      <div>
+        <span className={messageStyle.name}>{name}</span>
+        <span className={messageStyle.date}>{formatDate}</span>
+      </div>
+      <div className={messageStyle.message}>{text}</div>
     </div>
   )
 }

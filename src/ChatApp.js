@@ -2,6 +2,7 @@ import React from 'react';
 
 import LogIn from './LogIn/LogIn';
 import Chat from './Chat/Chat';
+import Header from './Header/Header';
 
 class ChatApp extends React.Component {
   constructor(props) {
@@ -11,7 +12,6 @@ class ChatApp extends React.Component {
       userName: null,
       connected: false,
       messages: [],
-      nameInput: null,
     };
 
     this.socket = new WebSocket("ws://st-chat.shas.tel");
@@ -29,7 +29,7 @@ class ChatApp extends React.Component {
   }
 
   getUserName(e) {
-    const nameInput = e.target.children[0].children[1].children[1];
+    const nameInput = e.target.children[1].children[1];
     this.setState({ userName: nameInput.value || 'User' });
     return false;
   }
@@ -52,7 +52,12 @@ class ChatApp extends React.Component {
       content = <Chat connected={this.state.connected} messages={this.state.messages} onKeyDown={this.sendMessage} />
     }
 
-    return <div>{content}</div>;
+    return (
+      <section>
+        <Header userName={this.state.userName} status={this.state.connected}/>
+        {content}
+      </section>
+    );
   }
 }
 

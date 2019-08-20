@@ -1,19 +1,47 @@
+.chat {
+  position: absolute;
+  top: calc(50% - 400px);
+  left: calc(50% - 400px);
+  width: 800px;
+  height: 800px;
+}
+
 .content { 
   margin-top: 10px; 
-  padding: 5px; 
-  height: 800px;
-  background: #ddd; 
-  border-radius: 5px;
-  overflow-y: scroll; 
+  height: 700px;
+  overflow-y: scroll;
+  background: #fff; 
+  border-radius: 10px;
   border: 1px solid #ccc;
 }
 
-.input { 
-  margin-top: 10px; 
-  padding: 5px; 
-  width: 400px;
-  border-radius: 2px; 
-  border: 1px solid #ccc;
+.sendForm {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+}
+
+.enterMessage { 
+  width: 90%;
+}
+
+.sendForm .sendMessage {
+  width: 35px;
+  height: 35px;
+  font-size: 15px;
+  background: #5e4ac6;
+  border: none;
+  border-radius: 20px;
+  color: #f7f7f7;
+  outline: none;
+  transition: transform 0.5s ease-in;
+}
+
+.sendMessage:hover {
+  transition: transform 0.2s ease-in;
+  transform: rotate(-90deg);
+  background: #423392;
 }
 
 .status { 
@@ -21,14 +49,4 @@
   width: 88px;
   display: block;
   float: left;
-}
-
-p { 
-  line-height: 18px; 
-}
-
-div { 
-  width: 500px; 
-  margin-left: auto; 
-  margin-right: auto;
 }
