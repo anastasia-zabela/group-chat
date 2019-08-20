@@ -15,8 +15,10 @@ class ChatApp extends React.Component {
     };
 
     this.socket = new WebSocket("ws://st-chat.shas.tel");
+    console.log(this.socket.readyState);
     this.socket.onopen = () => {
       this.setState({ connected: true });
+      console.log('open', this.socket.readyState);
     };
     this.socket.onmessage = (event) => {
       let messagesHistory = this.state.messages;
@@ -25,7 +27,10 @@ class ChatApp extends React.Component {
     };
 
     this.getUserName = this.getUserName.bind(this);
+    this.changeUserName = this.changeUserName.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
+    this.enterChat = this.enterChat.bind(this);
+    this.closeChat = this.closeChat.bind(this);
   }
 
   getUserName(e) {
@@ -34,14 +39,36 @@ class ChatApp extends React.Component {
     return false;
   }
 
+  changeUserName() {
+    this.setState({ userName: null });
+  }
+
   sendMessage(e) {
     if (e.key === 'Enter') {
-      console.log('user', this.state.userName)
       let message = e.target.value;
-      console.log(e.target.value);
-      this.socket.send(JSON.stringify({ from: this.state.userName, message: message}));
+      this.socket.send(JSON.stringify({ from: this.state.userName, message: message }));
       e.target.value = '';
+      console.log('message', this.socket.readyState, message);
     }
+  }
+
+  enterChat() {
+    this.socket = new WebSocket("ws://st-chat.shas.tel");
+    this.socket.onopen = () => {
+      this.setState({ connected: true });
+    };
+    console.log('enter', this.socket.readyState);
+    this.socket.onmessage = (event) => {
+      let messagesHistory = this.state.messages;
+      const newMessage = JSON.parse(event.data).reverse();
+      this.setState({ messages: messagesHistory.concat(newMessage) });
+    };
+  }
+
+  closeChat() {
+    this.socket.close();
+    this.setState({ connected: false });
+    console.log('close', this.socket.readyState);
   }
 
   render() {
@@ -54,7 +81,7 @@ class ChatApp extends React.Component {
 
     return (
       <section>
-        <Header userName={this.state.userName} status={this.state.connected}/>
+        <Header userName={this.state.userName} status={this.state.connected} changeUserName={this.changeUserName} enterChat={this.enterChat} closeChat={this.closeChat}/>
         {content}
       </section>
     );

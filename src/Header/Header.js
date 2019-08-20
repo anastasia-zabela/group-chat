@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import headerStyle from './Header.module.css';
 
-const Header = ({ userName, status }) => {
+const Header = ({ userName, status, changeUserName, enterChat, closeChat }) => {
   const [showMenu, setShowMenu] = useState(false);
   const displayUserName = {
     display: userName ? 'inline-block' : 'none',
@@ -19,10 +19,22 @@ const Header = ({ userName, status }) => {
   }
 
   document.body.addEventListener('click', (e) => {
-    if (e.target.tagName !== 'LI' && showMenu) {
+    if (e.target.tagName !== 'BUTTON' && showMenu) {
+      console.log(e.target.tagName)
       setShowMenu(!showMenu);
     }
   })
+
+  let button;
+  if (status) {
+    button = (
+      <button onClick={closeChat}>Exit chat</button>
+    )
+  } else if (!status) {
+    button = (
+      <button onClick={enterChat}>Enter chat</button>
+    )
+  }
 
   return (
     <header className={headerStyle.header}>
@@ -34,10 +46,10 @@ const Header = ({ userName, status }) => {
             <button onClick={showDropDownMenu}>{`${userName}`}</button>
             <ul className={headerStyle.nameMenu} style={displayMenu}>
               <li>
-                <button>Change name</button> 
+                <button onClick={changeUserName}>Change name</button> 
               </li>
               <li>
-                <button>Exit chat</button>
+                {button}
               </li>
             </ul>
           </li>
