@@ -4,6 +4,10 @@
   border-radius: 0 0 150% 150% / 0 0 50% 50%;
 }
 
+h1 {
+  color: #251d57;
+}
+
 nav {
   display: flex;
   justify-content: space-between;

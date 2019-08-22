@@ -60,7 +60,7 @@ class Chat extends React.Component {
           {this.state.renderedMessages}
         </div>
         <form action="#" className={chatStyle.sendForm} onSubmit={this.props.sendMessage}>
-          <input type="text" className={chatStyle.enterMessage} disabled={!this.props.connected} />
+          <input type="text" className={chatStyle.enterMessage} disabled={!this.props.connected} autoFocus />
           <button type="submit" className={chatStyle.sendMessage} value="">
             <FontAwesomeIcon icon={faChevronRight} />
           </button>

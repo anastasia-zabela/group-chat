@@ -9,7 +9,7 @@ const LogIn = (props) => {
           <h4 className={logInStyle.nameForm}>Welcome to RSS Chat</h4>
           <p className={logInStyle.authForm}>
             <label htmlFor="name">Your name</label>
-            <input type="text" id="name" autoComplete="off" autoFocus />
+            <input type="text" id="name" autoComplete="off" maxLength="50" autoFocus />
           </p>
         <input type="submit" value="Enter chat" />
       </form>
