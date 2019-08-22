@@ -9,7 +9,7 @@ class ChatApp extends React.Component {
     super(props);
 
     this.state = {
-      userName: null,
+      userName: localStorage.getItem('username') || null,
       connected: false,
       messages: [],
     };
@@ -35,7 +35,9 @@ class ChatApp extends React.Component {
 
   getUserName(e) {
     const nameInput = e.target.children[1].children[1];
-    this.setState({ userName: nameInput.value || 'User' });
+    const userName = nameInput.value || 'User';
+    this.setState({ userName: userName });
+    localStorage.setItem('username', userName);
     return false;
   }
 
