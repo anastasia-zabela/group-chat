@@ -3,6 +3,7 @@ import React from 'react';
 import LogIn from './LogIn/LogIn';
 import Chat from './Chat/Chat';
 import Header from './Header/Header';
+import sendNotification from './Notification/notification';
 
 class ChatApp extends React.Component {
   constructor(props) {
@@ -12,9 +13,10 @@ class ChatApp extends React.Component {
       userName: localStorage.getItem('username') || null,
       connected: false,
       messages: [],
+      activeTab: null,
     };
 
-    this.socket = new WebSocket("ws://st-chat.shas.tel");
+    this.socket = new WebSocket("wss://wssproxy.herokuapp.com/");
     console.log(this.socket.readyState);
     this.socket.onopen = () => {
       this.setState({ connected: true });
@@ -24,7 +26,23 @@ class ChatApp extends React.Component {
       let messagesHistory = this.state.messages;
       const newMessage = JSON.parse(event.data).reverse();
       this.setState({ messages: messagesHistory.concat(newMessage) });
+      if (newMessage.length === 1 && this.state.activeTab) {
+        sendNotification(newMessage[0].from, {body: newMessage[0].message});
+      }
+      
     };
+    this.socket.onerror = () => {
+      this.setState({ connected: false });
+    }
+
+    Notification.requestPermission();
+
+    window.onfocus = () => {
+      this.setState({ activeTab: false });
+    }
+    window.onblur = () => {
+      this.setState({ activeTab: true });
+    }
 
     this.getUserName = this.getUserName.bind(this);
     this.changeUserName = this.changeUserName.bind(this);
