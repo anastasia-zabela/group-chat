@@ -59,12 +59,12 @@ class Chat extends React.Component {
         <div className={chatStyle.content} id="content">
           {this.state.renderedMessages}
         </div>
-        <div className={chatStyle.sendForm}>
-          <input type="text" className={chatStyle.enterMessage} onKeyDown={this.props.onKeyDown} disabled={!this.props.connected} />
+        <form action="#" className={chatStyle.sendForm} onSubmit={this.props.sendMessage}>
+          <input type="text" className={chatStyle.enterMessage} disabled={!this.props.connected} />
           <button type="submit" className={chatStyle.sendMessage} value="">
             <FontAwesomeIcon icon={faChevronRight} />
           </button>
-        </div>
+        </form>
       </section>
     )
   }

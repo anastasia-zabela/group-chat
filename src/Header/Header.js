@@ -20,7 +20,6 @@ const Header = ({ userName, status, changeUserName, enterChat, closeChat }) => {
 
   document.body.addEventListener('click', (e) => {
     if (e.target.tagName !== 'BUTTON' && showMenu) {
-      console.log(e.target.tagName)
       setShowMenu(!showMenu);
     }
   })

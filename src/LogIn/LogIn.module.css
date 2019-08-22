@@ -4,7 +4,7 @@
   left: calc(50% - 200px);
 }
 
-form {
+.auth form {
   display: flex;
   flex-direction: column;
   justify-content: space-around;

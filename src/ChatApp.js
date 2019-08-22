@@ -3,7 +3,7 @@ import React from 'react';
 import LogIn from './LogIn/LogIn';
 import Chat from './Chat/Chat';
 import Header from './Header/Header';
-import sendNotification from './Notification/notification';
+import sendNotification from './components/notification';
 
 class ChatApp extends React.Component {
   constructor(props) {
@@ -12,28 +12,11 @@ class ChatApp extends React.Component {
     this.state = {
       userName: localStorage.getItem('username') || null,
       connected: false,
-      messages: [],
       activeTab: null,
+      messages: [],
     };
 
-    this.socket = new WebSocket("wss://wssproxy.herokuapp.com/");
-    console.log(this.socket.readyState);
-    this.socket.onopen = () => {
-      this.setState({ connected: true });
-      console.log('open', this.socket.readyState);
-    };
-    this.socket.onmessage = (event) => {
-      let messagesHistory = this.state.messages;
-      const newMessage = JSON.parse(event.data).reverse();
-      this.setState({ messages: messagesHistory.concat(newMessage) });
-      if (newMessage.length === 1 && this.state.activeTab) {
-        sendNotification(newMessage[0].from, {body: newMessage[0].message});
-      }
-      
-    };
-    this.socket.onerror = () => {
-      this.setState({ connected: false });
-    }
+    this.getSocket();
 
     Notification.requestPermission();
 
@@ -51,12 +34,31 @@ class ChatApp extends React.Component {
     this.closeChat = this.closeChat.bind(this);
   }
 
+  getSocket() {
+    this.socket = new WebSocket("wss://wssproxy.herokuapp.com/");
+    this.socket.onopen = () => {
+      this.setState({ connected: true });
+    };
+    this.socket.onmessage = (event) => {
+      let messagesHistory = this.state.messages;
+      const newMessage = JSON.parse(event.data).reverse();
+      this.setState({ messages: messagesHistory.concat(newMessage) });
+      if (newMessage.length === 1 && this.state.activeTab) {
+        sendNotification(newMessage[0].from, {body: newMessage[0].message});
+      }
+      
+    };
+    this.socket.onerror = () => {
+      this.setState({ connected: false });
+    }
+  }
+
   getUserName(e) {
+    e.preventDefault();
     const nameInput = e.target.children[1].children[1];
     const userName = nameInput.value || 'User';
     this.setState({ userName: userName });
     localStorage.setItem('username', userName);
-    return false;
   }
 
   changeUserName() {
@@ -64,31 +66,19 @@ class ChatApp extends React.Component {
   }
 
   sendMessage(e) {
-    if (e.key === 'Enter') {
-      let message = e.target.value;
-      this.socket.send(JSON.stringify({ from: this.state.userName, message: message }));
-      e.target.value = '';
-      console.log('message', this.socket.readyState, message);
-    }
+    e.preventDefault();
+    const message = e.target.children[0].value;
+    this.socket.send(JSON.stringify({ from: this.state.userName, message: message }));
+    e.target.children[0].value = '';
   }
 
   enterChat() {
-    this.socket = new WebSocket("ws://st-chat.shas.tel");
-    this.socket.onopen = () => {
-      this.setState({ connected: true });
-    };
-    console.log('enter', this.socket.readyState);
-    this.socket.onmessage = (event) => {
-      let messagesHistory = this.state.messages;
-      const newMessage = JSON.parse(event.data).reverse();
-      this.setState({ messages: messagesHistory.concat(newMessage) });
-    };
+    this.getSocket();
   }
 
   closeChat() {
     this.socket.close();
     this.setState({ connected: false });
-    console.log('close', this.socket.readyState);
   }
 
   render() {
@@ -96,7 +86,7 @@ class ChatApp extends React.Component {
     if (this.state.userName === null) {
       content = <LogIn onSubmit={this.getUserName}/>;
     } else {
-      content = <Chat connected={this.state.connected} messages={this.state.messages} onKeyDown={this.sendMessage} />
+      content = <Chat connected={this.state.connected} messages={this.state.messages} sendMessage={this.sendMessage} />
     }
 
     return (
